@@ -6,6 +6,8 @@ public class AnimationController : MonoBehaviour
     [SerializeField]
     private float SpeedChangeRate = 10.0f;
     [SerializeField]
+    private float MaxRotateSpeed = 360f;
+    [SerializeField]
     private AudioClip LandingAudioClip;
     [SerializeField]
     private AudioClip[] FootstepAudioClips;
@@ -19,10 +21,10 @@ public class AnimationController : MonoBehaviour
     private Animator _animator;
     private GroundedCheck _groundedCheck;
 
-    private float _targetRotation = 0.0f;
     private Vector3 _lastPosition;
-    private Vector3 _currentSpeed;
+    private Vector3 _instantaneousSpeed;
     private Vector3 _smoothedSpeed;
+    private float _rotationVelocity;
 
     private int _animIDSpeed;
     private int _animIDGrounded;
@@ -47,9 +49,9 @@ public class AnimationController : MonoBehaviour
     private void UpdateSpeed()
     {
         var _currentPosition = transform.position;
-        _currentSpeed = (_currentPosition - _lastPosition) / Time.deltaTime;
+        _instantaneousSpeed = (_currentPosition - _lastPosition) / Time.deltaTime;
         _lastPosition = _currentPosition;
-        _smoothedSpeed = Vector3.Lerp(_smoothedSpeed, _currentSpeed,
+        _smoothedSpeed = Vector3.Lerp(_smoothedSpeed, _instantaneousSpeed,
                 Time.deltaTime * SpeedChangeRate);
     }
 
@@ -87,8 +89,9 @@ public class AnimationController : MonoBehaviour
 
         if(RotateToMovementDirection)
         {
-            _targetRotation = Mathf.Atan2(_smoothedSpeed.x, _smoothedSpeed.z) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0.0f, _targetRotation, 0.0f);
+            float targetRotation = Mathf.Atan2(_smoothedSpeed.x, _smoothedSpeed.z) * Mathf.Rad2Deg;
+            targetRotation = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetRotation, MaxRotateSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Euler(0.0f, targetRotation, 0.0f);
         }
 
         _animator.SetFloat(_animIDSpeed, smoothedHorizontalSpeed < 0.01f ? 0f : smoothedHorizontalSpeed);

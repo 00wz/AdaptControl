@@ -467,6 +467,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerArmature
       objectReference: {fileID: 0}
+    - target: {fileID: 4637283903548530138, guid: 4281d2b3c03a34f42be14d06cc367556, type: 3}
+      propertyPath: RotationSmoothTime
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 5868686385283580860, guid: 4281d2b3c03a34f42be14d06cc367556, type: 3}
       propertyPath: GroundLayers.m_Bits
       value: 1
