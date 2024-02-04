@@ -7,35 +7,40 @@ public class GodsHand : MonoBehaviour
     private float speedOfClimb = 1f;
     [SerializeField]
     private float speedOfDrag = 1f;
+    [SerializeField]
+    private LayerMask charactersLayers;
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit raycastHit))
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, charactersLayers))
             {
                 Rigidbody target = raycastHit.rigidbody;
                 if(target!=null)
                 {
-                    Plane plane = new Plane(Vector3.down, raycastHit.point);
-                    StartCoroutine(Drag(target, plane, target.position-raycastHit.point));
+                    Vector3 screenOffset =
+                        Camera.main.WorldToScreenPoint(target.position) - Input.mousePosition;
+                    StartCoroutine(Drag(target, screenOffset));
                 }
             }
         }
     }
 
-    IEnumerator Drag(Rigidbody target, Plane altitude, Vector3 targetOffset)
+    IEnumerator Drag(Rigidbody target, Vector3 screenOffset)
     {
+        float haight = 0f;
+
         while (Input.GetMouseButton(0))
         {
-            altitude.distance -= Input.GetAxis("Mouse ScrollWheel")*speedOfClimb;
+            var newHeight = haight - Input.GetAxis("Mouse ScrollWheel") * speedOfClimb;
+            haight = Mathf.Max(newHeight, 0f);
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (altitude.Raycast(ray, out float hitDist))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition + screenOffset);
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, ~charactersLayers))
             {
-                var destination = ray.GetPoint(hitDist) + targetOffset;
-                //if (destination.y < target.position.y) destination.y = target.position.y;//
+                var destination = raycastHit.point + (haight * Vector3.up);
                 destination = Vector3.MoveTowards(target.position,
                     destination, speedOfDrag * Time.deltaTime);
                 target.MovePositionSweep(destination);
