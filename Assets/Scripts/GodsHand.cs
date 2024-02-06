@@ -30,8 +30,8 @@ public class GodsHand : MonoBehaviour
 
     IEnumerator Drag(Rigidbody target, Vector3 screenOffset)
     {
-        //bool gravityCache = target.useGravity;
-        //target.useGravity = false;
+        IDragHandlable dragHandlable = target.GetComponent<IDragHandlable>();
+        dragHandlable?.OnDragBegin();
         float haight = target.position.y;
 
         while (Input.GetMouseButton(0))
@@ -51,6 +51,6 @@ public class GodsHand : MonoBehaviour
             yield return null;
         }
 
-        //target.useGravity = gravityCache;
+        dragHandlable?.OnDragEnd();
     }
 }
