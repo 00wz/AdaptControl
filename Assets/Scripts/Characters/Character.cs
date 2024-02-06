@@ -4,7 +4,7 @@ using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.AI;
 
-//[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class Character : MonoBehaviour
 {
     [SerializeField]
@@ -17,14 +17,22 @@ public class Character : MonoBehaviour
 
     protected virtual void Awake()
     {
-        //_navMeshAgent = GetComponent<NavMeshAgent>();
-        InteractiveTrigger.OnTriggerStayAsObservable().Subscribe(ReachDestinationCheck)
-            .AddTo(_navigationSubscriptions);///
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshAgent.enabled = false;
     }
 
     public void GoToStationary(GameObject destination, Action OnReachDestination)
     {
-        StopNavigation();
+        if(_navMeshAgent.enabled)
+        {
+            _onReachDestinationEvent = null;
+            _navigationSubscriptions.Clear();
+        }
+        else
+        {
+            _navMeshAgent.enabled = true;
+        }
+
         _onReachDestinationEvent += OnReachDestination;
         _destination = destination;
         _navMeshAgent.SetDestination(destination.transform.position);
@@ -55,8 +63,7 @@ public class Character : MonoBehaviour
 
     public void StopNavigation()
     {
-        //_navMeshAgent.ResetPath
-        _navMeshAgent.isStopped = true;
+        _navMeshAgent.enabled = false;
         _onReachDestinationEvent = null;
         _destination = null;
         _navigationSubscriptions.Clear();
