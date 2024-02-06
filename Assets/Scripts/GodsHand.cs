@@ -30,6 +30,8 @@ public class GodsHand : MonoBehaviour
 
     IEnumerator Drag(Rigidbody target, Vector3 screenOffset)
     {
+        //bool gravityCache = target.useGravity;
+        //target.useGravity = false;
         float haight = target.position.y;
 
         while (Input.GetMouseButton(0))
@@ -40,7 +42,6 @@ public class GodsHand : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, ~charactersLayers))
             {
                 haight = Mathf.Max(haight, raycastHit.point.y);
-                //var destination = raycastHit.point + (haight * Vector3.up);
                 Vector3 destination = new Vector3(raycastHit.point.x, haight, raycastHit.point.z);
                 destination = Vector3.MoveTowards(target.position,
                     destination, speedOfDrag * Time.deltaTime);
@@ -49,5 +50,7 @@ public class GodsHand : MonoBehaviour
 
             yield return null;
         }
+
+        //target.useGravity = gravityCache;
     }
 }

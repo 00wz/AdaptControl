@@ -793,6 +793,10 @@ PrefabInstance:
       propertyPath: GroundLayers.m_Bits
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5868686385283580860, guid: 4281d2b3c03a34f42be14d06cc367556, type: 3}
+      propertyPath: <Grounded>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5930158855145388821, guid: 4281d2b3c03a34f42be14d06cc367556, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -984,7 +988,7 @@ CapsuleCollider:
   m_Radius: 0.28
   m_Height: 1.8
   m_Direction: 1
-  m_Center: {x: 0, y: 0.93, z: 0}
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
