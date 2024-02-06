@@ -85,16 +85,18 @@ public class AnimationController : MonoBehaviour
 
     private void Move()
     {
-        float smoothedHorizontalSpeed = new Vector3(_smoothedSpeed.x, 0.0f, _smoothedSpeed.z).magnitude;
+        Vector3 smoothedHorizontalSpeed = new Vector3(_smoothedSpeed.x, 0.0f, _smoothedSpeed.z);
+        float smoothedHorizontalSpeedMagnitude = smoothedHorizontalSpeed.magnitude;
 
-        if(RotateToMovementDirection)
+        if(RotateToMovementDirection && smoothedHorizontalSpeed != Vector3.zero)
         {
             float targetRotation = Mathf.Atan2(_smoothedSpeed.x, _smoothedSpeed.z) * Mathf.Rad2Deg;
             targetRotation = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetRotation, MaxRotateSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Euler(0.0f, targetRotation, 0.0f);
         }
 
-        _animator.SetFloat(_animIDSpeed, smoothedHorizontalSpeed < 0.01f ? 0f : smoothedHorizontalSpeed);
+        _animator.SetFloat(_animIDSpeed,
+            smoothedHorizontalSpeedMagnitude < 0.01f ? 0f : smoothedHorizontalSpeedMagnitude);
     }
 
     private void OnFootstep(AnimationEvent animationEvent)
