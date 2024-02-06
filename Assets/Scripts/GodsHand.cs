@@ -30,17 +30,18 @@ public class GodsHand : MonoBehaviour
 
     IEnumerator Drag(Rigidbody target, Vector3 screenOffset)
     {
-        float haight = 0f;
+        float haight = target.position.y;
 
         while (Input.GetMouseButton(0))
         {
-            var newHeight = haight - Input.GetAxis("Mouse ScrollWheel") * speedOfClimb;
-            haight = Mathf.Max(newHeight, 0f);
+            haight -= Input.GetAxis("Mouse ScrollWheel") * speedOfClimb;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition + screenOffset);
             if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, ~charactersLayers))
             {
-                var destination = raycastHit.point + (haight * Vector3.up);
+                haight = Mathf.Max(haight, raycastHit.point.y);
+                //var destination = raycastHit.point + (haight * Vector3.up);
+                Vector3 destination = new Vector3(raycastHit.point.x, haight, raycastHit.point.z);
                 destination = Vector3.MoveTowards(target.position,
                     destination, speedOfDrag * Time.deltaTime);
                 target.MovePositionSweep(destination);
