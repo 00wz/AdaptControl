@@ -45,7 +45,7 @@ public class GodsHand : MonoBehaviour
                 Vector3 destination = new Vector3(raycastHit.point.x, haight, raycastHit.point.z);
                 destination = Vector3.MoveTowards(target.position,
                     destination, speedOfDrag * Time.deltaTime);
-                target.MovePositionSweep(destination);
+                target.MovePositionFlowAround(destination);
             }
 
             yield return null;

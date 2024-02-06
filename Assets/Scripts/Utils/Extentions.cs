@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class Extentions
@@ -32,8 +30,33 @@ public static class Extentions
             return;
         }
         self.MovePosition(position);
-    }    
-    
+    }
+
+    /// <summary>
+    /// Moves a Rigidbody around obstacles
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="position">Provides the new position for the Rigidbody object</param>
+    public static void MovePositionFlowAround(this Rigidbody self, Vector3 position)
+    {
+        Vector3 worldOffset = position - self.position;
+        if (self.SweepTest(worldOffset, out RaycastHit raycastHit, worldOffset.magnitude))
+        {
+            worldOffset = worldOffset.WithMagnitude(Mathf.Max(raycastHit.distance - ERROR, 0f));
+            self.MovePosition(self.position + worldOffset);
+            worldOffset = position - self.position;
+            worldOffset = Vector3.ProjectOnPlane(worldOffset, raycastHit.normal);
+            AddWorldOffsetSweep(self, worldOffset);
+            return;
+        }
+        self.MovePosition(position);
+    }
+
+    /// <summary>
+    /// Add world offset to Rigidbody while checking for obstacles
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="position">Provides the new position for the Rigidbody object</param>
     public static void AddWorldOffsetSweep(this Rigidbody self, Vector3 offset)
     {
         if(self.SweepTest(offset,out RaycastHit raycastHit,offset.magnitude))
