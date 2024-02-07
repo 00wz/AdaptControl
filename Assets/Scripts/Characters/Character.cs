@@ -12,6 +12,7 @@ public class Character : MonoBehaviour
 
     private NavMeshAgent _navMeshAgent;
     private Action _onReachDestinationEvent;
+    private Action _onMissingDestinationEvent;
     private GameObject _destination;
     private CompositeDisposable _navigationSubscriptions = new CompositeDisposable();
 
@@ -21,11 +22,12 @@ public class Character : MonoBehaviour
         _navMeshAgent.enabled = false;
     }
 
-    public void GoToStationary(GameObject destination, Action OnReachDestination)
+    private void GoTo(GameObject destination, Action OnReachDestination)
     {
         if(_navMeshAgent.enabled)
         {
             _onReachDestinationEvent = null;
+            _onMissingDestinationEvent = null;
             _navigationSubscriptions.Clear();
         }
         else
@@ -40,15 +42,41 @@ public class Character : MonoBehaviour
             .AddTo(_navigationSubscriptions);
     }
 
-    public void GoToDynamic(GameObject destination, Action OnReachDestination)
+    public void GoToStationary(GameObject destination, Action OnReachDestination,
+        Action OnMissingDestination)
     {
-        GoToStationary(destination, OnReachDestination);
+        GoTo(destination, OnReachDestination);
+        Observable.EveryUpdate().Subscribe(_ => DestinationValidityCheck())
+    .AddTo(_navigationSubscriptions);
+        _onMissingDestinationEvent += OnMissingDestination;
+    }
+
+    public void GoToDynamic(GameObject destination, Action OnReachDestination,
+        Action OnMissingDestination)
+    {
+        GoTo(destination, OnReachDestination);
         Observable.EveryUpdate().Subscribe(_ => UpdateDestination())
             .AddTo(_navigationSubscriptions);
+        _onMissingDestinationEvent += OnMissingDestination;
+    }
+
+    private void DestinationValidityCheck()
+    {
+        if(_destination==null)
+        {
+            _onMissingDestinationEvent?.Invoke();
+            StopNavigation();
+        }
     }
 
     private void UpdateDestination()
     {
+        if (_destination == null)
+        {
+            _onMissingDestinationEvent?.Invoke();
+            StopNavigation();
+            return;
+        }
         _navMeshAgent.SetDestination(_destination.transform.position);
     }
 
@@ -65,6 +93,7 @@ public class Character : MonoBehaviour
     {
         _navMeshAgent.enabled = false;
         _onReachDestinationEvent = null;
+        _onMissingDestinationEvent = null;
         _destination = null;
         _navigationSubscriptions.Clear();
     }
