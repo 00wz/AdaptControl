@@ -21,6 +21,8 @@ public class Worker : Character, IDragHandlable
 
     private IEnumerator SearchState()
     {
+        ShowMainStateView();
+
         List<Workplace> workplaces = new();
 
         while (true)
@@ -55,14 +57,21 @@ public class Worker : Character, IDragHandlable
         }
 
         GoToStationary(closestWorkplace.gameObject,
-            () => ShowWorkStateView(closestWorkplace),
+            () => StartCoroutine(WorkState(closestWorkplace)),
             () => StartCoroutine(SearchState()));
+    }
+
+    private IEnumerator WorkState(Workplace workplace)
+    {
+        ShowWorkStateView(workplace);
+        yield return new WaitUntil(() => workplace == null);
+        StartCoroutine(SearchState());
     }
 
     private void ShowWorkStateView(Workplace workplace)
     {
         WorkerMainStateView.SetActive(false);
-        _workStateView = Instantiate<GameObject>(workplace.WorkStateView, transform.position,
+        _workStateView = Instantiate<GameObject>(workplace.WorkerWorkStateView, transform.position,
             transform.rotation, this.transform);
     }
 

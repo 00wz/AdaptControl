@@ -9,7 +9,8 @@ public class BuildSystem : MonoBehaviour
     [SerializeField]
     private LayerMask GroundLayers;
     [SerializeField]
-    private Transform WorkplacesRoot;
+    private Transform BuildingsRoot;
+
     [Header("Building prototypes materials")]
     [SerializeField]
     private Material OnBuildingValidMaterial;
@@ -18,22 +19,28 @@ public class BuildSystem : MonoBehaviour
 
     [Header("testing")]
     [SerializeField]
-    private WorkplaceConfig workplace;
+    private BuildingConfig building;
     private void Start()
     {
-        StartCoroutine(Build(workplace));
+        StartCoroutine(Build(building));
     }
 
-    private IEnumerator Build(WorkplaceConfig workplaceConfig)
+    private IEnumerator Build(BuildingConfig buildingConfig)
     {
         int overlapObstacleCount = 0;
         CompositeDisposable triggerSubscriptions = new();
 
-        //initialize prototype
-        GameObject prototype = Instantiate(workplaceConfig.WorkplacePrototype, WorkplacesRoot);
+        //initialize building prototype
+        GameObject prototype = Instantiate(buildingConfig.BuildingPrototype, BuildingsRoot);
         prototype.SetActive(false);
+        if(!prototype.TryGetComponent<Rigidbody>(out Rigidbody prototypeRigidbody))
+        {
+            prototypeRigidbody = prototype.AddComponent<Rigidbody>();
+        }
+        prototypeRigidbody.isKinematic = true;
         Renderer prototypeRenderer = prototype.GetComponent<Renderer>();
         Collider prototypeCollider = prototype.GetComponent<Collider>();
+        prototypeCollider.isTrigger = true;
         prototypeRenderer.material = OnBuildingValidMaterial;
 
         //subscribe to prototype overlap
@@ -50,13 +57,13 @@ public class BuildSystem : MonoBehaviour
             {
                 prototype.transform.position = raycastHit.point;
             }
-            //build workplace if valid
-            if(Input.GetMouseButtonDown(0) && overlapObstacleCount <=0)
+            //build a construction site if valid
+            if (Input.GetMouseButtonDown(0) && overlapObstacleCount <=0)
             {
-                InstantiateWorkplace();
+                InstantiateConstructionSiteAndRemovePrototype();
                 break;
             }
-            //exit
+            //remove prototype and exit
             if(Input.GetMouseButton(1) || Input.GetKeyDown(KeyCode.Escape))
             {
                 RemovePrototype();
@@ -88,13 +95,13 @@ public class BuildSystem : MonoBehaviour
             }
         }
 
-        //prototype is replaced by a real building
-        void InstantiateWorkplace()
+        void InstantiateConstructionSiteAndRemovePrototype()
         {
             Vector3 position = prototype.transform.position;
             Quaternion rotation = prototype.transform.rotation;
             RemovePrototype();
-            Instantiate(workplaceConfig.WorkplacePrefab, position, rotation, WorkplacesRoot);
+            var constructionSite = Instantiate(buildingConfig.ConstructionSite, position, rotation, BuildingsRoot);
+            constructionSite.Init(buildingConfig.BuildingPrefab);
         }
 
         void RemovePrototype()

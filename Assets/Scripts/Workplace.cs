@@ -5,5 +5,5 @@ using UnityEngine;
 public class Workplace : MonoBehaviour
 {
     [SerializeField]
-    public GameObject WorkStateView;
+    public GameObject WorkerWorkStateView;
 }

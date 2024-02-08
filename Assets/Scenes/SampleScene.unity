@@ -542,10 +542,10 @@ MonoBehaviour:
   GroundLayers:
     serializedVersion: 2
     m_Bits: 64
-  WorkplacesRoot: {fileID: 1208743456}
+  BuildingsRoot: {fileID: 1208743456}
   OnBuildingValidMaterial: {fileID: 2100000, guid: 48ca68f665499944eb3e4ff53cd39a05, type: 2}
   OnBuildingInvalidMaterial: {fileID: 2100000, guid: 27e789d9b2f21c94f81fd712b3d938cf, type: 2}
-  workplace: {fileID: 11400000, guid: 91b236fb20611f04f9181bf6ca406ce6, type: 2}
+  building: {fileID: 11400000, guid: 91b236fb20611f04f9181bf6ca406ce6, type: 2}
 --- !u!4 &1494524393
 Transform:
   m_ObjectHideFlags: 0
