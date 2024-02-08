@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class Character : MonoBehaviour
 {
     [SerializeField]
     private Collider InteractiveTrigger;
+    [SerializeField]
+    private GroundedCheck GroundedCheck;
 
     private NavMeshAgent _navMeshAgent;
     private Action _onReachDestinationEvent;
@@ -20,11 +23,20 @@ public class Character : MonoBehaviour
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.enabled = false;
+        if (GroundedCheck == null)
+        {
+            GroundedCheck = GetComponentInChildren<GroundedCheck>();
+        }
     }
 
-    private void GoTo(GameObject destination, Action OnReachDestination)
+    private IEnumerator GoTo(GameObject destination, Action OnReachDestination,
+        Action OnEveryFrameEvent, Action OnMissingDestination)
     {
-        if(_navMeshAgent.enabled)
+        //waiting for landing
+        yield return new WaitUntil(() => GroundedCheck.Grounded);
+
+        //clear old subscriptions if navigation is active
+        if (_navMeshAgent.enabled)
         {
             _onReachDestinationEvent = null;
             _onMissingDestinationEvent = null;
@@ -35,29 +47,43 @@ public class Character : MonoBehaviour
             _navMeshAgent.enabled = true;
         }
 
+        //recording callbacks and starting navigation
         _onReachDestinationEvent += OnReachDestination;
         _destination = destination;
         _navMeshAgent.SetDestination(destination.transform.position);
         InteractiveTrigger.OnTriggerStayAsObservable().Subscribe(ReachDestinationCheck)
             .AddTo(_navigationSubscriptions);
+        Observable.EveryUpdate().Subscribe(_ => OnEveryFrameEvent.Invoke())
+            .AddTo(_navigationSubscriptions);
+        _onMissingDestinationEvent += OnMissingDestination;
     }
 
+    /// <summary>
+    /// Forces the character to move toward a stationary target
+    /// </summary>
+    /// <param name="destination">Terget</param>
+    /// <param name="OnReachDestination">Callback to reach the destination</param>
+    /// <param name="OnMissingDestination">Destination loss callback</param>
     public void GoToStationary(GameObject destination, Action OnReachDestination,
         Action OnMissingDestination)
     {
-        GoTo(destination, OnReachDestination);
-        Observable.EveryUpdate().Subscribe(_ => DestinationValidityCheck())
-    .AddTo(_navigationSubscriptions);
-        _onMissingDestinationEvent += OnMissingDestination;
+        StopAllCoroutines();
+        StartCoroutine(GoTo(destination, OnReachDestination, DestinationValidityCheck,
+            OnMissingDestination));
     }
 
+    /// <summary>
+    /// Forces the character to move toward a moving target
+    /// </summary>
+    /// <param name="destination">Target</param>
+    /// <param name="OnReachDestination">Callback to reach the destination</param>
+    /// <param name="OnMissingDestination">Destination loss callback</param>
     public void GoToDynamic(GameObject destination, Action OnReachDestination,
         Action OnMissingDestination)
     {
-        GoTo(destination, OnReachDestination);
-        Observable.EveryUpdate().Subscribe(_ => UpdateDestination())
-            .AddTo(_navigationSubscriptions);
-        _onMissingDestinationEvent += OnMissingDestination;
+        StopAllCoroutines();
+        StartCoroutine(GoTo(destination, OnReachDestination, DestinationValidityCheckAndUpdate,
+            OnMissingDestination));
     }
 
     private void DestinationValidityCheck()
@@ -69,7 +95,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    private void UpdateDestination()
+    private void DestinationValidityCheckAndUpdate()
     {
         if (_destination == null)
         {
@@ -88,7 +114,10 @@ public class Character : MonoBehaviour
         }
         ReachDestination();
     }
-
+    
+    /// <summary>
+    /// Stop mooving
+    /// </summary>
     public void StopNavigation()
     {
         _navMeshAgent.enabled = false;
