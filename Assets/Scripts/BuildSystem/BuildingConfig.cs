@@ -11,4 +11,6 @@ public class BuildingConfig : ScriptableObject
     public GameObject BuildingPrototype;
     [SerializeField]
     public ConstructionSiteWorkplace ConstructionSite;
+    [SerializeField]
+    public Sprite Icon;
 }

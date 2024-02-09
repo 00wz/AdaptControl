@@ -65,5 +65,25 @@ public static class Extentions
         }
         self.MovePosition(self.position + offset);
     }
+
+    public static T GetOrAddComponent<T>(this GameObject self) where T: Component
+    {
+        T component;
+        if(self.TryGetComponent<T>(out component))
+        {
+            return component;
+        }
+        return self.AddComponent<T>();
+    }
+
+    public static T GetOrAddComponent<T>(this Component self) where T: Component
+    {
+        T component;
+        if(self.TryGetComponent<T>(out component))
+        {
+            return component;
+        }
+        return self.gameObject.AddComponent<T>();
+    }
 }
 

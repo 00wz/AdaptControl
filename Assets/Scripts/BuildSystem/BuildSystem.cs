@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using UnityEngine.EventSystems;
 
 public class BuildSystem : MonoBehaviour
 {
@@ -20,9 +21,26 @@ public class BuildSystem : MonoBehaviour
     [Header("testing")]
     [SerializeField]
     private BuildingConfig building;
+
+    private const string BUILD_SYSTEM_VIEW_PATH = "BuildSystemView";
+    private ButtonGroup BuildSystemView;
+
     private void Start()
     {
-        StartCoroutine(Build(building));
+        BuildSystemView = GameObject.Instantiate<ButtonGroup>(
+            Resources.Load<ButtonGroup>(BUILD_SYSTEM_VIEW_PATH), GameRoot.Instance.Canvas.transform);
+
+        AddBuild(building);
+    }
+
+    public void AddBuild(BuildingConfig buildingConfig)
+    {
+        BuildSystemView.AddButton(buildingConfig.Icon, () => StartBuilding(buildingConfig));
+    }
+
+    private void StartBuilding(BuildingConfig buildingConfig)
+    {
+        StartCoroutine(Build(buildingConfig));
     }
 
     private IEnumerator Build(BuildingConfig buildingConfig)
@@ -57,16 +75,18 @@ public class BuildSystem : MonoBehaviour
             {
                 prototype.transform.position = raycastHit.point;
             }
+            //remove prototype and exit
+            if((Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject())
+                || Input.GetMouseButton(1)
+                || Input.GetKeyDown(KeyCode.Escape))
+            {
+                RemovePrototype();
+                break;
+            }
             //build a construction site if valid
             if (Input.GetMouseButtonDown(0) && overlapObstacleCount <=0)
             {
                 InstantiateConstructionSiteAndRemovePrototype();
-                break;
-            }
-            //remove prototype and exit
-            if(Input.GetMouseButton(1) || Input.GetKeyDown(KeyCode.Escape))
-            {
-                RemovePrototype();
                 break;
             }
             yield return null;
