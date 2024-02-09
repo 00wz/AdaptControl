@@ -18,44 +18,19 @@ public class Character : MonoBehaviour
     private Action _onMissingDestinationEvent;
     private GameObject _destination;
     private CompositeDisposable _navigationSubscriptions = new CompositeDisposable();
+    private CompositeDisposable _waitLandingSubscription = new CompositeDisposable();
+
+    public bool IsGoing { get; private set; } = false;
 
     protected virtual void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.enabled = false;
+        InteractiveTrigger.isTrigger = true;
         if (GroundedCheck == null)
         {
             GroundedCheck = GetComponentInChildren<GroundedCheck>();
         }
-    }
-
-    private IEnumerator GoTo(GameObject destination, Action OnReachDestination,
-        Action OnEveryFrameEvent, Action OnMissingDestination)
-    {
-        //waiting for landing
-        yield return new WaitUntil(() => GroundedCheck.Grounded);
-
-        //clear old subscriptions if navigation is active
-        if (_navMeshAgent.enabled)
-        {
-            _onReachDestinationEvent = null;
-            _onMissingDestinationEvent = null;
-            _navigationSubscriptions.Clear();
-        }
-        else
-        {
-            _navMeshAgent.enabled = true;
-        }
-
-        //recording callbacks and starting navigation
-        _onReachDestinationEvent += OnReachDestination;
-        _destination = destination;
-        _navMeshAgent.SetDestination(destination.transform.position);
-        InteractiveTrigger.OnTriggerStayAsObservable().Subscribe(ReachDestinationCheck)
-            .AddTo(_navigationSubscriptions);
-        Observable.EveryUpdate().Subscribe(_ => OnEveryFrameEvent.Invoke())
-            .AddTo(_navigationSubscriptions);
-        _onMissingDestinationEvent += OnMissingDestination;
     }
 
     /// <summary>
@@ -67,9 +42,7 @@ public class Character : MonoBehaviour
     public void GoToStationary(GameObject destination, Action OnReachDestination,
         Action OnMissingDestination)
     {
-        StopAllCoroutines();
-        StartCoroutine(GoTo(destination, OnReachDestination, DestinationValidityCheck,
-            OnMissingDestination));
+        GoTo(destination, OnReachDestination, DestinationValidityCheck, OnMissingDestination);
     }
 
     /// <summary>
@@ -81,9 +54,54 @@ public class Character : MonoBehaviour
     public void GoToDynamic(GameObject destination, Action OnReachDestination,
         Action OnMissingDestination)
     {
-        StopAllCoroutines();
-        StartCoroutine(GoTo(destination, OnReachDestination, DestinationValidityCheckAndUpdate,
-            OnMissingDestination));
+        GoTo(destination, OnReachDestination, DestinationValidityCheckAndUpdate, OnMissingDestination);
+    }
+
+    private void GoTo(GameObject destination, Action OnReachDestination,
+        Action OnEveryFrameEvent, Action OnMissingDestination)
+    {
+        if(IsGoing)
+        {
+            CancelGoing();
+        }
+        IsGoing = true;
+
+        SetTargetAfterLanding(destination, OnReachDestination, OnEveryFrameEvent, OnMissingDestination);
+    }
+
+    private void SetTargetAfterLanding(GameObject destination, Action OnReachDestination,
+        Action OnEveryFrameEvent, Action OnMissingDestination)
+    {
+        //waiting for landing
+        Observable.EveryUpdate().Subscribe(_ =>
+        {
+            if (GroundedCheck.Grounded)
+            {
+                _waitLandingSubscription.Clear();
+                SetTarget(destination, OnReachDestination, OnEveryFrameEvent, OnMissingDestination);
+            }
+
+        }).AddTo(_waitLandingSubscription);
+    }
+
+    private void SetTarget(GameObject destination, Action OnReachDestination,
+        Action OnEveryFrameEvent, Action OnMissingDestination)
+    {
+        if (!_navMeshAgent.enabled)
+        {
+            _navMeshAgent.enabled = true;
+        }
+
+        //recording callbacks and starting navigation
+        _onReachDestinationEvent += OnReachDestination;
+        _destination = destination;
+        _navMeshAgent.SetDestination(destination.transform.position);
+        Observable.EveryUpdate().Subscribe(_ => OnEveryFrameEvent.Invoke())
+            .AddTo(_navigationSubscriptions);
+        _onMissingDestinationEvent += OnMissingDestination;
+        //the destination point is reached only when the InteractiveTrigger overlaps with the target
+        InteractiveTrigger.OnTriggerStayAsObservable().Subscribe(ReachDestinationCheck)
+            .AddTo(_navigationSubscriptions);
     }
 
     private void DestinationValidityCheck()
@@ -91,7 +109,7 @@ public class Character : MonoBehaviour
         if(_destination==null)
         {
             _onMissingDestinationEvent?.Invoke();
-            StopNavigation();
+            StopGoing();
         }
     }
 
@@ -100,7 +118,7 @@ public class Character : MonoBehaviour
         if (_destination == null)
         {
             _onMissingDestinationEvent?.Invoke();
-            StopNavigation();
+            StopGoing();
             return;
         }
         _navMeshAgent.SetDestination(_destination.transform.position);
@@ -118,23 +136,32 @@ public class Character : MonoBehaviour
     /// <summary>
     /// Stop mooving
     /// </summary>
-    public void StopNavigation()
+    public void StopGoing()
     {
+        CancelGoing();
         _navMeshAgent.enabled = false;
+        _destination = null;
+        IsGoing = false;
+    }
+
+    //cancel the going, clears listeners and subscriptions without disabling navigation
+    //more productive than StopGoing() to refresh the target
+    private void CancelGoing()
+    {
         _onReachDestinationEvent = null;
         _onMissingDestinationEvent = null;
-        _destination = null;
+        _waitLandingSubscription.Clear();
         _navigationSubscriptions.Clear();
     }
 
     private void ReachDestination()
     {
         _onReachDestinationEvent?.Invoke();
-        StopNavigation();
+        StopGoing();
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
-        StopNavigation();
+        CancelGoing();
     }
 }

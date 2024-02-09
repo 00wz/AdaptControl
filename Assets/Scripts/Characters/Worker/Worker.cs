@@ -10,72 +10,25 @@ public class Worker : Character, IDragHandlable
     [SerializeField]
     private GameObject WorkerMainStateView;
 
+    [HideInInspector]
+    public Workplace CurrentWorkplace;
     private GameObject _workStateView;
-    //private Workplace _currentWorkplace;
-    private const float SEARCH_INTERVAL = 2f;
+    private StateMachine<Worker, WorkerSearchState> _stateMachine;
 
     private void Start()
     {
-        StartCoroutine(SearchState());
-    }
-
-    private IEnumerator SearchState()
-    {
+        _stateMachine = new StateMachine<Worker, WorkerSearchState>(context: this);
         ShowMainStateView();
-
-        List<Workplace> workplaces = new();
-
-        while (true)
-        {
-            var colls = Physics.OverlapSphere(transform.position, SearchRadius);
-
-            //Search all Workplace objects
-            for (int i = 0; i < colls.Length; i++)
-            {
-                if (colls[i].TryGetComponent<Workplace>(out Workplace workplace))
-                {
-                    workplaces.Add(workplace);
-                }
-            }
-
-            if (workplaces.Count > 0) break;
-
-            yield return new WaitForSeconds(SEARCH_INTERVAL);
-        }
-
-        //Select closest Workplace object
-        float minSqrDist = (workplaces[0].transform.position - transform.position).sqrMagnitude;
-        Workplace closestWorkplace = workplaces[0];
-        for (int i = 1; i < workplaces.Count; i++)
-        {
-            var sqrDist = (workplaces[i].transform.position - transform.position).sqrMagnitude;
-            if(sqrDist<minSqrDist)
-            {
-                minSqrDist = sqrDist;
-                closestWorkplace = workplaces[i];
-            }
-        }
-
-        GoToStationary(closestWorkplace.gameObject,
-            () => StartCoroutine(WorkState(closestWorkplace)),
-            () => StartCoroutine(SearchState()));
     }
 
-    private IEnumerator WorkState(Workplace workplace)
-    {
-        ShowWorkStateView(workplace);
-        yield return new WaitUntil(() => workplace == null);
-        StartCoroutine(SearchState());
-    }
-
-    private void ShowWorkStateView(Workplace workplace)
+    public void ShowWorkStateView(Workplace workplace)
     {
         WorkerMainStateView.SetActive(false);
         _workStateView = Instantiate<GameObject>(workplace.WorkerWorkStateView, transform.position,
             transform.rotation, this.transform);
     }
 
-    private void ShowMainStateView()
+    public void ShowMainStateView()
     {
         if (_workStateView != null)
         {
@@ -86,14 +39,12 @@ public class Worker : Character, IDragHandlable
 
     public void OnDragBegin()
     {
-        StopAllCoroutines();
-        StopNavigation();
-        ShowMainStateView();
+        _stateMachine.ChangeState<WorkerDraggedState>();
     }
 
     public void OnDragEnd()
     {
-        StartCoroutine(SearchState());
+        _stateMachine.ChangeState<WorkerSearchState>();
     }
 
     private void OnDrawGizmosSelected()
