@@ -7,6 +7,9 @@ public class GameRoot : MonoBehaviour
     [SerializeField]
     public Canvas Canvas;
 
+    [SerializeField]
+    public DialogView DialogView;
+
     static private GameRoot _instance;
     static public GameRoot Instance
     {
