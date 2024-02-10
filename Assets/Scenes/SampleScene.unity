@@ -1141,11 +1141,23 @@ MonoBehaviour:
     unityReference: {fileID: 11400000, guid: 7a348faa5e249194ea2a6b308056b1f9, type: 2}
     rawReference:
       rid: -2
+  - mode: 1
+    unityReference: {fileID: 0}
+    rawReference:
+      rid: 3696058063721857025
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: 7a348faa5e249194ea2a6b308056b1f9, type: 2}
+    rawReference:
+      rid: -2
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 3696058063721857025
+      type: {class: WaitStoryLine, ns: , asm: Assembly-CSharp}
+      data:
+        WaitingTime: 2
 --- !u!4 &810072089
 Transform:
   m_ObjectHideFlags: 0
