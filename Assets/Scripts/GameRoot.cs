@@ -10,6 +10,9 @@ public class GameRoot : MonoBehaviour
     [SerializeField]
     public DialogView DialogView;
 
+    [SerializeField]
+    public CameraMove CameraMove;
+
     static private GameRoot _instance;
     static public GameRoot Instance
     {

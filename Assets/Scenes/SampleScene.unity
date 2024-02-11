@@ -1144,20 +1144,24 @@ MonoBehaviour:
   - mode: 1
     unityReference: {fileID: 0}
     rawReference:
-      rid: 3696058063721857025
-  - mode: 0
-    unityReference: {fileID: 11400000, guid: 7a348faa5e249194ea2a6b308056b1f9, type: 2}
+      rid: 3696058063721857026
+  - mode: 1
+    unityReference: {fileID: 0}
     rawReference:
-      rid: -2
+      rid: 3696058063721857027
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 3696058063721857025
+    - rid: 3696058063721857026
       type: {class: WaitStoryLine, ns: , asm: Assembly-CSharp}
       data:
         WaitingTime: 2
+    - rid: 3696058063721857027
+      type: {class: ShowTargetStoryLine, ns: , asm: Assembly-CSharp}
+      data:
+        Target: {fileID: 1184321186}
 --- !u!4 &810072089
 Transform:
   m_ObjectHideFlags: 0
@@ -1414,12 +1418,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.42000648, y: 0, z: 0, w: 0.9075211}
-  m_LocalPosition: {x: 3.54, y: 10.82, z: 22.51}
+  m_LocalRotation: {x: 0.42000648, y: -0, z: -0, w: 0.9075211}
+  m_LocalPosition: {x: -582.335, y: -305.93, z: 22.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2132418311}
   m_LocalEulerAnglesHint: {x: 49.67, y: 0, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
@@ -1428,13 +1432,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cb54f937a73e6c4791c205955f48f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 20
   HeightChangeStep: 5
+  ShowingTime: 1
 --- !u!1 &1044398420
 GameObject:
   m_ObjectHideFlags: 0
@@ -1642,6 +1647,11 @@ MonoBehaviour:
   Body: {fileID: 1808497129}
   ButtonRoot: {fileID: 764995383}
   ButtonPrefab: {fileID: 1594355410933747183, guid: 6f057e564a22f454fb4412d3c52980ea, type: 3}
+--- !u!4 &1184321186 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3028083343380686648, guid: a7ed0adaf107c494c85577126a3a103b, type: 3}
+  m_PrefabInstance: {fileID: 6677051477053857750}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1208743455
 GameObject:
   m_ObjectHideFlags: 0
@@ -2375,6 +2385,7 @@ Transform:
   m_Children:
   - {fileID: 367428190}
   - {fileID: 1256346718}
+  - {fileID: 963194228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2132418312
@@ -2391,6 +2402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Canvas: {fileID: 367428189}
   DialogView: {fileID: 1107519288}
+  CameraMove: {fileID: 963194229}
 --- !u!1001 &5491275662543640281
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2513,7 +2525,6 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 945596145}
   - {fileID: 6677051477053857750}

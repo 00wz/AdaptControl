@@ -2,7 +2,8 @@ using UnityEngine;
 
 public static class Extentions
 {
-    private const float ERROR = 0.01f;
+    private const float SWEEP_ERROR = 0.01f;
+    private const float VECTOR_EQUAL_ERROR = 0.0001f;
 
     /// <summary>
     /// Returns a vector with the given magnitude
@@ -16,6 +17,17 @@ public static class Extentions
     }
 
     /// <summary>
+    /// Returns true if the given vector is almost equal to the given vector
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public static bool NearlyEqual(this Vector3 self, Vector3 other)
+    {
+        return (self - other).sqrMagnitude < VECTOR_EQUAL_ERROR;
+    }
+
+    /// <summary>
     /// Moves a Rigidbody while checking for obstacles
     /// </summary>
     /// <param name="self"></param>
@@ -25,7 +37,7 @@ public static class Extentions
         Vector3 worldOffset = position - self.position;
         if(self.SweepTest(worldOffset,out RaycastHit raycastHit,worldOffset.magnitude))
         {
-            worldOffset = worldOffset.WithMagnitude(Mathf.Max(raycastHit.distance-ERROR, 0f));
+            worldOffset = worldOffset.WithMagnitude(Mathf.Max(raycastHit.distance-SWEEP_ERROR, 0f));
             self.MovePosition(self.position + worldOffset);
             return;
         }
@@ -42,7 +54,7 @@ public static class Extentions
         Vector3 worldOffset = position - self.position;
         if (self.SweepTest(worldOffset, out RaycastHit raycastHit, worldOffset.magnitude))
         {
-            worldOffset = worldOffset.WithMagnitude(Mathf.Max(raycastHit.distance - ERROR, 0f));
+            worldOffset = worldOffset.WithMagnitude(Mathf.Max(raycastHit.distance - SWEEP_ERROR, 0f));
             self.MovePosition(self.position + worldOffset);
             worldOffset = position - self.position;
             worldOffset = Vector3.ProjectOnPlane(worldOffset, raycastHit.normal);
@@ -61,7 +73,7 @@ public static class Extentions
     {
         if(self.SweepTest(offset,out RaycastHit raycastHit,offset.magnitude))
         {
-            offset = offset.WithMagnitude(Mathf.Max(raycastHit.distance-ERROR, 0f));
+            offset = offset.WithMagnitude(Mathf.Max(raycastHit.distance-SWEEP_ERROR, 0f));
         }
         self.MovePosition(self.position + offset);
     }

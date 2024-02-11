@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using System;
 
 public class CameraMove : MonoBehaviour
 {
@@ -9,9 +11,14 @@ public class CameraMove : MonoBehaviour
     [SerializeField]
     private float HeightChangeStep = 5;
 
+    [Header("Target showing settings")]
+    [SerializeField]
+    private float ShowingTime = 1f;
+
     private Vector3 LOCAL_RIGHT;
     private Vector3 LOCAL_FORWARD;
     private float _targetHeight;
+    private bool CanHandleInput { get; set; } = true;
 
     void Start()
     {
@@ -20,6 +27,11 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
+        if(!CanHandleInput)
+        {
+            return;
+        }
+
         if(Input.mousePosition.x >= Screen.width)
         {
             transform.Translate(LOCAL_RIGHT * MoveSpeed * Time.deltaTime, Space.World);
@@ -48,6 +60,58 @@ public class CameraMove : MonoBehaviour
             Mathf.MoveTowards(transform.position.y, _targetHeight, MoveSpeed * Time.deltaTime),
             transform.position.z
             );
+    }
+
+    public void ShowTarget(Transform target, Action onExecution, bool refundable = false)
+    {
+        StopAllCoroutines();
+        CanHandleInput = false;
+        Observable.WhenAll( Observable.FromCoroutine(_ =>ShowTarget(target.position, refundable)))
+            .Subscribe(_ =>
+            {
+                onExecution?.Invoke();
+                CanHandleInput = true;
+            });
+    }
+        
+    private IEnumerator ShowTarget(Vector3 targetPosition, bool refundable)
+    {
+        Plane targetAltitude = new Plane(Vector3.down, targetPosition);
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f));
+        if (!targetAltitude.Raycast(ray, out float distance))
+        {
+            yield break;
+        }
+
+        Vector3 startPosition = transform.position;
+        Vector3 endPosition =
+            transform.position + (targetPosition - ray.GetPoint(distance));
+
+        while (!transform.position.NearlyEqual(endPosition))
+        {
+            yield return null;
+            transform.position =
+                Vector3.MoveTowards(transform.position, endPosition, MoveSpeed * Time.deltaTime);
+        }
+
+        if (!refundable)
+        {
+            yield break;
+        }
+
+        float remainingShowTime = ShowingTime;
+        while (remainingShowTime >= 0)
+        {
+            remainingShowTime -= Time.deltaTime;
+            yield return null;
+        }
+
+        while (!transform.position.NearlyEqual(startPosition))
+        {
+            transform.position =
+                Vector3.MoveTowards(transform.position, startPosition, MoveSpeed * Time.deltaTime);
+            yield return null;
+        }
     }
 
     private void RefreshCameraSettings()
