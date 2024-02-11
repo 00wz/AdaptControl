@@ -21,6 +21,7 @@ public class CameraMove : MonoBehaviour
     private Vector3 LOCAL_FORWARD;
     private float _targetHeight;
     private bool CanHandleInput { get; set; } = true;
+    private const int SCREEN_ERROR = 5;
 
     void Start()
     {
@@ -36,20 +37,20 @@ public class CameraMove : MonoBehaviour
 
         Vector3 input = Vector3.zero;
 
-        if (Input.mousePosition.x >= Screen.width)
+        if (Input.mousePosition.x >= Screen.width - SCREEN_ERROR)
         {
             input.x = 1f;
         }
-        else if (Input.mousePosition.x <= 0)
+        else if (Input.mousePosition.x <= 0 + SCREEN_ERROR)
         {
             input.x = -1f;
         }
 
-        if (Input.mousePosition.y >= Screen.height)
+        if (Input.mousePosition.y >= Screen.height - SCREEN_ERROR)
         {
             input.y = 1f;
         }
-        else if (Input.mousePosition.y <= 0)
+        else if (Input.mousePosition.y <= 0 + SCREEN_ERROR)
         {
             input.y = -1f;
         }
