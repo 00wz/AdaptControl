@@ -11,10 +11,6 @@ public class CameraMove : MonoBehaviour
     [SerializeField]
     private float HeightChangeStep = 5;
 
-    [Header("Target showing settings")]
-    [SerializeField]
-    private float ShowingTime = 1f;
-
     private Vector3 LOCAL_RIGHT;
     private Vector3 LOCAL_FORWARD;
     private float _targetHeight;
@@ -62,11 +58,12 @@ public class CameraMove : MonoBehaviour
             );
     }
 
-    public void ShowTarget(Transform target, Action onExecution, bool refundable = false)
+    public void ShowTarget(Transform target, Action onExecution, float showTime, bool refundable = false)
     {
         StopAllCoroutines();
         CanHandleInput = false;
-        Observable.WhenAll( Observable.FromCoroutine(_ =>ShowTarget(target.position, refundable)))
+        Observable.WhenAll( 
+            Observable.FromCoroutine(_ =>ShowTarget(target.position, showTime, refundable)))
             .Subscribe(_ =>
             {
                 onExecution?.Invoke();
@@ -74,7 +71,7 @@ public class CameraMove : MonoBehaviour
             });
     }
         
-    private IEnumerator ShowTarget(Vector3 targetPosition, bool refundable)
+    private IEnumerator ShowTarget(Vector3 targetPosition, float showTime, bool refundable)
     {
         Plane targetAltitude = new Plane(Vector3.down, targetPosition);
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f));
@@ -94,16 +91,16 @@ public class CameraMove : MonoBehaviour
                 Vector3.MoveTowards(transform.position, endPosition, MoveSpeed * Time.deltaTime);
         }
 
-        if (!refundable)
-        {
-            yield break;
-        }
-
-        float remainingShowTime = ShowingTime;
+        float remainingShowTime = showTime;
         while (remainingShowTime >= 0)
         {
             remainingShowTime -= Time.deltaTime;
             yield return null;
+        }
+
+        if (!refundable)
+        {
+            yield break;
         }
 
         while (!transform.position.NearlyEqual(startPosition))

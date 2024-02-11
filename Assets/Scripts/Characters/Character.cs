@@ -19,6 +19,8 @@ public class Character : MonoBehaviour
     private GameObject _destination;
     private CompositeDisposable _navigationSubscriptions = new CompositeDisposable();
     private CompositeDisposable _waitLandingSubscription = new CompositeDisposable();
+    //use the closest point, for correct movement to large objects
+    private bool _useClosestPointToNavigate;
 
     public bool IsGoing { get; private set; } = false;
 
@@ -42,6 +44,7 @@ public class Character : MonoBehaviour
     public void GoToStationary(GameObject destination, Action OnReachDestination,
         Action OnMissingDestination)
     {
+        _useClosestPointToNavigate = true;
         GoTo(destination, OnReachDestination, DestinationValidityCheck, OnMissingDestination);
     }
 
@@ -54,6 +57,7 @@ public class Character : MonoBehaviour
     public void GoToDynamic(GameObject destination, Action OnReachDestination,
         Action OnMissingDestination)
     {
+        _useClosestPointToNavigate = false;
         GoTo(destination, OnReachDestination, DestinationValidityCheckAndUpdate, OnMissingDestination);
     }
 
@@ -95,13 +99,26 @@ public class Character : MonoBehaviour
         //recording callbacks and starting navigation
         _onReachDestinationEvent += OnReachDestination;
         _destination = destination;
-        _navMeshAgent.SetDestination(destination.transform.position);
+        _navMeshAgent.SetDestination(
+            _useClosestPointToNavigate?
+            ClosestPoint(destination):
+            destination.transform.position
+            );
         Observable.EveryUpdate().Subscribe(_ => OnEveryFrameEvent.Invoke())
             .AddTo(_navigationSubscriptions);
         _onMissingDestinationEvent += OnMissingDestination;
         //the destination point is reached only when the InteractiveTrigger overlaps with the target
         InteractiveTrigger.OnTriggerStayAsObservable().Subscribe(ReachDestinationCheck)
             .AddTo(_navigationSubscriptions);
+    }
+
+    private Vector3 ClosestPoint(GameObject target)
+    {
+        if(target.TryGetComponent<Collider>(out Collider coll))
+        {
+            return coll.ClosestPoint(transform.position);
+        }
+        return target.transform.position;
     }
 
     private void DestinationValidityCheck()
@@ -121,7 +138,11 @@ public class Character : MonoBehaviour
             StopGoing();
             return;
         }
-        _navMeshAgent.SetDestination(_destination.transform.position);
+        _navMeshAgent.SetDestination(
+            _useClosestPointToNavigate ?
+            ClosestPoint(_destination) :
+            _destination.transform.position
+            );
     }
 
     private void ReachDestinationCheck(Collider other)

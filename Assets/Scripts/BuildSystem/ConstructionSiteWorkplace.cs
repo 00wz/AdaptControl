@@ -1,22 +1,26 @@
 using UnityEngine;
 using UniRx;
+using System;
 
 public class ConstructionSiteWorkplace : Workplace
 {
     [SerializeField]
     private float BuildTime = 3f;
 
-    private GameObject _buildingPrefab;
+    private BuildingConfig _buildingConfig;
     private int _numberOfBuilders = 0;
     private CompositeDisposable _buildEveryFrameSubscription = new();
 
-    public void Init(GameObject BuildingPrefab)
+    public static event  Action<GameObject, BuildingConfig> OnCompletBuild;
+
+    public void Init(BuildingConfig buildingConfig)
     {
-        _buildingPrefab = BuildingPrefab;
+        _buildingConfig = buildingConfig;
     }
 
     public override void StartWork()
     {
+        base.StartWork();
         _numberOfBuilders++;
         if(_buildEveryFrameSubscription.Count == 0)
         {
@@ -44,7 +48,9 @@ public class ConstructionSiteWorkplace : Workplace
 
     private void InstantiateBuilding()
     {
-        Instantiate(_buildingPrefab, transform.position, transform.rotation, transform.parent);
+        var building = Instantiate(_buildingConfig.BuildingPrefab,
+            transform.position, transform.rotation, transform.parent);
+        OnCompletBuild?.Invoke(building, _buildingConfig);
         Destroy(gameObject);
     }
 

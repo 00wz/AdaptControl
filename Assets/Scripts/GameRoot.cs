@@ -13,6 +13,9 @@ public class GameRoot : MonoBehaviour
     [SerializeField]
     public CameraMove CameraMove;
 
+    [SerializeField]
+    public BuildSystem BuildSystem;
+
     static private GameRoot _instance;
     static public GameRoot Instance
     {

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6068eb944415acc4596ec8bdb81bc168, type: 3}
-  m_Name: Wood
+  m_Name: TestBuilding
   m_EditorClassIdentifier: 
   BuildingPrefab: {fileID: 2590491910020832306, guid: 7cd5d32b247efe347975270f4c8d6d6e, type: 3}
   BuildingPrototype: {fileID: 2590491910020832306, guid: 5a50be3629d6bbe458cf43cc504d01cf, type: 3}

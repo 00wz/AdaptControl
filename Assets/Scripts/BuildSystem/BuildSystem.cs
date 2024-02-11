@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine.EventSystems;
+using System;
 
 public class BuildSystem : MonoBehaviour
 {
@@ -18,19 +19,15 @@ public class BuildSystem : MonoBehaviour
     [SerializeField]
     private Material OnBuildingInvalidMaterial;
 
-    [Header("testing")]
-    [SerializeField]
-    private BuildingConfig building;
-
     private const string BUILD_SYSTEM_VIEW_PATH = "BuildSystemView";
     private ButtonGroup BuildSystemView;
+
+    public event Action<BuildingConfig> OnBuildConstructionSite;
 
     private void Start()
     {
         BuildSystemView = GameObject.Instantiate<ButtonGroup>(
             Resources.Load<ButtonGroup>(BUILD_SYSTEM_VIEW_PATH), GameRoot.Instance.Canvas.transform);
-
-        AddBuild(building);
     }
 
     public void AddBuild(BuildingConfig buildingConfig)
@@ -56,8 +53,8 @@ public class BuildSystem : MonoBehaviour
             prototypeRigidbody = prototype.AddComponent<Rigidbody>();
         }
         prototypeRigidbody.isKinematic = true;
-        Renderer prototypeRenderer = prototype.GetComponent<Renderer>();
-        Collider prototypeCollider = prototype.GetComponent<Collider>();
+        Renderer prototypeRenderer = prototype.GetComponentInChildren<Renderer>();
+        Collider prototypeCollider = prototype.GetComponentInChildren<Collider>();
         prototypeCollider.isTrigger = true;
         prototypeRenderer.material = OnBuildingValidMaterial;
 
@@ -121,7 +118,8 @@ public class BuildSystem : MonoBehaviour
             Quaternion rotation = prototype.transform.rotation;
             RemovePrototype();
             var constructionSite = Instantiate(buildingConfig.ConstructionSite, position, rotation, BuildingsRoot);
-            constructionSite.Init(buildingConfig.BuildingPrefab);
+            constructionSite.Init(buildingConfig);
+            OnBuildConstructionSite?.Invoke(buildingConfig);
         }
 
         void RemovePrototype()
