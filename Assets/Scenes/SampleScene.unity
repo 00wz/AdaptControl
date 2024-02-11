@@ -1605,7 +1605,7 @@ MonoBehaviour:
     rawReference:
       rid: 3696058079359270930
   - mode: 0
-    unityReference: {fileID: 11400000, guid: 2a9682302a0ed9b48b99597b4d247f87, type: 2}
+    unityReference: {fileID: 11400000, guid: 4df85c6979634b84892dd6f253f656c7, type: 2}
     rawReference:
       rid: -2
   - mode: 1
@@ -1614,6 +1614,38 @@ MonoBehaviour:
       rid: 3696058079359270931
   - mode: 0
     unityReference: {fileID: 11400000, guid: 8169aaa5a4f0d7742bfb38c0174f4b76, type: 2}
+    rawReference:
+      rid: -2
+  - mode: 1
+    unityReference: {fileID: 0}
+    rawReference:
+      rid: 3696058079359270933
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: f5b6cb6ba0300e440935a028f1db0b80, type: 2}
+    rawReference:
+      rid: -2
+  - mode: 1
+    unityReference: {fileID: 0}
+    rawReference:
+      rid: 3696058079359270935
+  - mode: 1
+    unityReference: {fileID: 0}
+    rawReference:
+      rid: 3696058079359270937
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: 34d5e8a3d6b200b4dac4b0d3c068aea8, type: 2}
+    rawReference:
+      rid: -2
+  - mode: 1
+    unityReference: {fileID: 0}
+    rawReference:
+      rid: 3696058079359270939
+  - mode: 1
+    unityReference: {fileID: 0}
+    rawReference:
+      rid: 3696058079359270941
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: 3514f2ff9dd66784aa7931d1d20e600e, type: 2}
     rawReference:
       rid: -2
   references:
@@ -1670,6 +1702,26 @@ MonoBehaviour:
       type: {class: WaitEndBuildingStoryLine, ns: , asm: Assembly-CSharp}
       data:
         BuildingConfig: {fileID: 11400000, guid: f09d93bcb22954b4fb75bf2a82fa7872, type: 2}
+    - rid: 3696058079359270933
+      type: {class: WaitStoryLine, ns: , asm: Assembly-CSharp}
+      data:
+        WaitingTime: 1
+    - rid: 3696058079359270935
+      type: {class: AddBuildStoryPoint, ns: , asm: Assembly-CSharp}
+      data:
+        Building: {fileID: 11400000, guid: 7c1f5ea89e203d04ab12d01521de0e3a, type: 2}
+    - rid: 3696058079359270937
+      type: {class: WaitBuildConstructionSiteStoryLine, ns: , asm: Assembly-CSharp}
+      data:
+        BuildingConfig: {fileID: 11400000, guid: 7c1f5ea89e203d04ab12d01521de0e3a, type: 2}
+    - rid: 3696058079359270939
+      type: {class: WaitEndBuildingStoryLine, ns: , asm: Assembly-CSharp}
+      data:
+        BuildingConfig: {fileID: 11400000, guid: 7c1f5ea89e203d04ab12d01521de0e3a, type: 2}
+    - rid: 3696058079359270941
+      type: {class: WaitStoryLine, ns: , asm: Assembly-CSharp}
+      data:
+        WaitingTime: 1
 --- !u!4 &810072089
 Transform:
   m_ObjectHideFlags: 0
@@ -1947,6 +1999,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 20
   HeightChangeStep: 5
+  Max: {x: 39.5, y: 21.5, z: 60.7}
+  Min: {x: -30, y: 3.32, z: -9.37}
 --- !u!1 &1044398420
 GameObject:
   m_ObjectHideFlags: 0

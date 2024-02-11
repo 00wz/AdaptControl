@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BuildingConfig", menuName = "Configs/WorkplaceConfig")]
+[CreateAssetMenu(fileName = "BuildingConfig", menuName = "Configs/BuildingConfig")]
 public class BuildingConfig : ScriptableObject
 {
     [SerializeField]

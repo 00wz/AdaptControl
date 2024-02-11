@@ -38,7 +38,7 @@ public class WorkerSearchState : BaseState<Worker>
             //Search all available Workplace objects
             for (int i = 0; i < colls.Length; i++)
             {
-                if (colls[i].TryGetComponent<Workplace>(out Workplace workplace) && workplace.CanAcceptAnWorker)
+                if (colls[i].gameObject.TryGetComponentInParent<Workplace>(out Workplace workplace) && workplace.CanAcceptAnWorker)
                 {
                     workplaces.Add(workplace);
                 }

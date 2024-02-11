@@ -11,6 +11,12 @@ public class CameraMove : MonoBehaviour
     [SerializeField]
     private float HeightChangeStep = 5;
 
+    [Header("Camera constraints")]
+    [SerializeField]
+    private Vector3 Max;
+    [SerializeField]
+    private Vector3 Min;
+
     private Vector3 LOCAL_RIGHT;
     private Vector3 LOCAL_FORWARD;
     private float _targetHeight;
@@ -28,34 +34,63 @@ public class CameraMove : MonoBehaviour
             return;
         }
 
-        if(Input.mousePosition.x >= Screen.width)
+        Vector3 input = Vector3.zero;
+
+        if (Input.mousePosition.x >= Screen.width)
         {
-            transform.Translate(LOCAL_RIGHT * MoveSpeed * Time.deltaTime, Space.World);
+            input.x = 1f;
         }
         else if (Input.mousePosition.x <= 0)
         {
-            transform.Translate(LOCAL_RIGHT * -MoveSpeed * Time.deltaTime, Space.World);
-        }        
-        
-        if(Input.mousePosition.y >= Screen.height)
+            input.x = -1f;
+        }
+
+        if (Input.mousePosition.y >= Screen.height)
         {
-            transform.Translate(LOCAL_FORWARD * MoveSpeed * Time.deltaTime, Space.World);
+            input.y = 1f;
         }
         else if (Input.mousePosition.y <= 0)
         {
-            transform.Translate(LOCAL_FORWARD * -MoveSpeed * Time.deltaTime, Space.World);
+            input.y = -1f;
         }
 
-        if(Input.GetMouseButton(0))//so it doesn't conflict with the GodsHand
+        if (!Input.GetMouseButton(0))//so it doesn't conflict with the GodsHand
         {
-            return;
+            input.z = Input.GetAxis("Mouse ScrollWheel");
         }
-        _targetHeight -= Input.GetAxis("Mouse ScrollWheel") * HeightChangeStep;
+
+        if(input!=Vector3.zero)
+        {
+            Move(input);
+        }
+
+        //smooth vertical movement
         transform.position = new Vector3(
             transform.position.x,
             Mathf.MoveTowards(transform.position.y, _targetHeight, MoveSpeed * Time.deltaTime),
-            transform.position.z
-            );
+            transform.position.z);
+    }
+
+    private void Move(Vector3 input)
+    {
+        transform.Translate(input.x * LOCAL_RIGHT * MoveSpeed * Time.deltaTime, Space.World);
+        transform.Translate(input.y * LOCAL_FORWARD * MoveSpeed * Time.deltaTime, Space.World);
+        ClampHorizontalPosition();
+
+        _targetHeight -= input.z * HeightChangeStep;
+        _targetHeight = Mathf.Clamp(_targetHeight, Min.y, Max.y);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireCube((Min + Max) * 0.5f, Max - Min);
+    }
+
+    private void ClampHorizontalPosition()
+    {
+        float x = Mathf.Clamp(transform.position.x, Min.x, Max.x);
+        float z = Mathf.Clamp(transform.position.z, Min.z, Max.z);
+        transform.position = new Vector3(x, transform.position.y, z);
     }
 
     public void ShowTarget(Transform target, Action onExecution, float showTime, bool refundable = false)

@@ -97,5 +97,15 @@ public static class Extentions
         }
         return self.gameObject.AddComponent<T>();
     }
+
+    public static bool TryGetComponentInParent<T>(this GameObject self, out T component)
+    {
+        component = self.GetComponentInParent<T>();
+        if(component == null)
+        {
+            return false;
+        }
+        return true;
+    }
 }
 

@@ -147,11 +147,11 @@ public class Character : MonoBehaviour
 
     private void ReachDestinationCheck(Collider other)
     {
-        if(other.gameObject != _destination)
+        if(//other.gameObject == _destination ||
+            other.gameObject.transform.IsChildOf(_destination.transform))
         {
-            return;
+            ReachDestination();
         }
-        ReachDestination();
     }
     
     /// <summary>
