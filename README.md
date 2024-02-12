@@ -8,6 +8,8 @@
 * [DialogView](https://github.com/00wz/AdaptControl/blob/main/Assets/Scripts/UI/DialogView.cs) - класс отвечающий за отображение диалогов и сообщений.
 * [BuildSystem](https://github.com/00wz/AdaptControl/blob/main/Assets/Scripts/BuildSystem/BuildSystem.cs) - класс отвечающий за строительство.
 
+[GodsHand](https://github.com/00wz/AdaptControl/blob/main/Assets/Scripts/GodsHand.cs) - перемещение персонажей по воздуху с помощью мыши.
+
 [Character](https://github.com/00wz/AdaptControl/blob/main/Assets/Scripts/Characters/Character.cs) - надстройка над navMeshAgent. его наследник - [Worker](https://github.com/00wz/AdaptControl/blob/main/Assets/Scripts/Characters/Worker/Worker.cs) - персонаж способный работать. имеет [стейтмашину](https://github.com/00wz/AdaptControl/tree/main/Assets/Scripts/StateMachine) с состояниями [поиска работы](https://github.com/00wz/AdaptControl/blob/main/Assets/Scripts/Characters/Worker/States/WorkerSearchState.cs), [работы](https://github.com/00wz/AdaptControl/blob/main/Assets/Scripts/Characters/Worker/States/WorkerWorkState.cs), и [перемещения к рабочему месту](https://github.com/00wz/AdaptControl/blob/main/Assets/Scripts/Characters/Worker/States/WorkerGoingToWorkplaceState.cs).
 
 [StorySystem](https://github.com/00wz/AdaptControl/blob/main/Assets/Scripts/StorySystem/StorySystem.cs) - позволяет создать линейную цепочку событий из классов реализующих _IStoryPoint_ (событие после которого сразу выполнянтся следующее) и _IStoryLine_ (событие передает вызывает следующее только после своего завершения). для кастомизации StorySystem в инспекторе использовал [Serializable Interface](https://github.com/Thundernerd/Unity3D-SerializableInterface.git)
