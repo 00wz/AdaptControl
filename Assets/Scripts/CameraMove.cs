@@ -30,12 +30,28 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
-        if(!CanHandleInput)
+        Vector3 input = ReadInput();
+
+        if(input!=Vector3.zero)
         {
-            return;
+            Move(input);
         }
 
+        //smooth vertical movement
+        transform.position = new Vector3(
+            transform.position.x,
+            Mathf.MoveTowards(transform.position.y, _targetHeight, MoveSpeed * Time.deltaTime),
+            transform.position.z);
+    }
+
+    private Vector3 ReadInput()
+    {
         Vector3 input = Vector3.zero;
+
+        if (!CanHandleInput)
+        {
+            return input;
+        }
 
         if (Input.mousePosition.x >= Screen.width - SCREEN_ERROR)
         {
@@ -60,16 +76,7 @@ public class CameraMove : MonoBehaviour
             input.z = Input.GetAxis("Mouse ScrollWheel");
         }
 
-        if(input!=Vector3.zero)
-        {
-            Move(input);
-        }
-
-        //smooth vertical movement
-        transform.position = new Vector3(
-            transform.position.x,
-            Mathf.MoveTowards(transform.position.y, _targetHeight, MoveSpeed * Time.deltaTime),
-            transform.position.z);
+        return input;
     }
 
     private void Move(Vector3 input)
