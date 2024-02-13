@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4720693650705875064}
-  - component: {fileID: 5557725284247505306}
+  - component: {fileID: 1284448485842328680}
   m_Layer: 3
   m_Name: InteractTrigger
   m_TagString: Untagged
@@ -32,8 +32,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5203004214670243025}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &5557725284247505306
-CapsuleCollider:
+--- !u!135 &1284448485842328680
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -50,11 +50,9 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.09
-  m_Height: 1.8
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.9, z: 0.64}
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8228903550907499996
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,8 +174,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 381504aa38f1e4e44b27e122292cab70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractiveTrigger: {fileID: 5557725284247505306}
+  InteractiveTrigger: {fileID: 1284448485842328680}
   GroundedCheck: {fileID: 0}
+  RotateSpeed: 360
 --- !u!1001 &8444684924735817004
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -567,7 +566,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 1
   Grounded: 1
-  RotateToMovementDirection: 1
+  RotateToMovementDirection: 0
 --- !u!114 &3743407480223840699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -584,5 +583,5 @@ MonoBehaviour:
   GroundedRadius: 0.28
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 103
   <Grounded>k__BackingField: 0

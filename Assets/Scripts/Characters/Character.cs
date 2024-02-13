@@ -12,15 +12,20 @@ public class Character : MonoBehaviour
     private Collider InteractiveTrigger;
     [SerializeField]
     private GroundedCheck GroundedCheck;
+    [Tooltip("Turning speed when reaching the destination point")]
+    [SerializeField]
+    private float RotateSpeed = 360f;
 
     private NavMeshAgent _navMeshAgent;
     private Action _onReachDestinationEvent;
     private Action _onMissingDestinationEvent;
     private GameObject _destination;
-    private CompositeDisposable _navigationSubscriptions = new CompositeDisposable();
-    private CompositeDisposable _waitLandingSubscription = new CompositeDisposable();
+    private CompositeDisposable _checkTargetSubscriptions = new CompositeDisposable();
+    private CompositeDisposable _interactiveTriggerSubscription = new CompositeDisposable();
+    private CompositeDisposable _groundingSubscription = new CompositeDisposable();
     //use the closest point, for correct movement to large objects
     private bool _useClosestPointToNavigate;
+    private const float ROTATION_ERROR = 1f;
 
     public bool IsGoing { get; private set; } = false;
 
@@ -70,25 +75,29 @@ public class Character : MonoBehaviour
         }
         IsGoing = true;
 
-        SetTargetAfterLanding(destination, OnReachDestination, OnEveryFrameEvent, OnMissingDestination);
+        SetDestinationAfterLanding(destination, OnReachDestination, OnEveryFrameEvent, OnMissingDestination);
     }
 
-    private void SetTargetAfterLanding(GameObject destination, Action OnReachDestination,
+    private void SetDestinationAfterLanding(GameObject destination, Action OnReachDestination,
         Action OnEveryFrameEvent, Action OnMissingDestination)
     {
-        //waiting for landing
-        Observable.EveryUpdate().Subscribe(_ =>
-        {
-            if (GroundedCheck.Grounded)
-            {
-                _waitLandingSubscription.Clear();
-                SetTarget(destination, OnReachDestination, OnEveryFrameEvent, OnMissingDestination);
-            }
-
-        }).AddTo(_waitLandingSubscription);
+        //grounding check every frame
+        Observable.EveryUpdate().Subscribe(_ => SetDestinationIfGrounded(destination,
+            OnReachDestination, OnEveryFrameEvent, OnMissingDestination))
+        .AddTo(_groundingSubscription);
     }
 
-    private void SetTarget(GameObject destination, Action OnReachDestination,
+    void SetDestinationIfGrounded(GameObject destination, Action OnReachDestination,
+    Action OnEveryFrameEvent, Action OnMissingDestination)
+    {
+        if (GroundedCheck.Grounded)
+        {
+            _groundingSubscription.Clear();
+            SetDestination(destination, OnReachDestination, OnEveryFrameEvent, OnMissingDestination);
+        }
+    }
+
+    private void SetDestination(GameObject destination, Action OnReachDestination,
         Action OnEveryFrameEvent, Action OnMissingDestination)
     {
         if (!_navMeshAgent.enabled)
@@ -105,11 +114,11 @@ public class Character : MonoBehaviour
             destination.transform.position
             );
         Observable.EveryUpdate().Subscribe(_ => OnEveryFrameEvent.Invoke())
-            .AddTo(_navigationSubscriptions);
+            .AddTo(_checkTargetSubscriptions);
         _onMissingDestinationEvent += OnMissingDestination;
         //the destination point is reached only when the InteractiveTrigger overlaps with the target
         InteractiveTrigger.OnTriggerStayAsObservable().Subscribe(ReachDestinationCheck)
-            .AddTo(_navigationSubscriptions);
+            .AddTo(_interactiveTriggerSubscription);
     }
 
     private Vector3 ClosestPoint(GameObject target)
@@ -147,11 +156,36 @@ public class Character : MonoBehaviour
 
     private void ReachDestinationCheck(Collider other)
     {
-        if(//other.gameObject == _destination ||
-            other.gameObject.transform.IsChildOf(_destination.transform))
+            Debug.Log(other.name);
+        if(other.gameObject.transform.IsChildOf(_destination.transform))
+        {
+            RotateToDestination(other.transform.position);
+        }
+    }
+
+    ///navMeshAgent rotates only when moving.
+    ///if the destination is close, you need to manually rotate it.
+    private void RotateToDestination(Vector3 destinationPosition)
+    {
+        var direction = destinationPosition - transform.position;
+        float targetRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        var delta = Mathf.DeltaAngle(transform.eulerAngles.y, targetRotation);
+        if(Mathf.Abs(delta) > ROTATION_ERROR)
+        {
+            float newRotationY = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetRotation,
+                RotateSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Euler(0.0f, newRotationY, 0.0f);
+        }
+        else
         {
             ReachDestination();
         }
+    }
+
+    private void ReachDestination()
+    {
+        _onReachDestinationEvent?.Invoke();
+        StopGoing();
     }
     
     /// <summary>
@@ -171,14 +205,9 @@ public class Character : MonoBehaviour
     {
         _onReachDestinationEvent = null;
         _onMissingDestinationEvent = null;
-        _waitLandingSubscription.Clear();
-        _navigationSubscriptions.Clear();
-    }
-
-    private void ReachDestination()
-    {
-        _onReachDestinationEvent?.Invoke();
-        StopGoing();
+        _groundingSubscription.Clear();
+        _checkTargetSubscriptions.Clear();
+        _interactiveTriggerSubscription.Clear();
     }
 
     protected virtual void OnDestroy()
