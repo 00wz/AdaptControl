@@ -9,7 +9,7 @@ using UnityEngine.AI;
 public class Character : MonoBehaviour
 {
     [SerializeField]
-    private Collider InteractiveTrigger;
+    private TriggerObservable InteractiveTrigger;
     [SerializeField]
     private GroundedCheck GroundedCheck;
     [Tooltip("Turning speed when reaching the destination point")]
@@ -21,7 +21,6 @@ public class Character : MonoBehaviour
     private Action _onMissingDestinationEvent;
     private GameObject _destination;
     private CompositeDisposable _checkTargetSubscriptions = new CompositeDisposable();
-    private CompositeDisposable _interactiveTriggerSubscription = new CompositeDisposable();
     private CompositeDisposable _groundingSubscription = new CompositeDisposable();
     //use the closest point, for correct movement to large objects
     private bool _useClosestPointToNavigate;
@@ -33,7 +32,7 @@ public class Character : MonoBehaviour
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.enabled = false;
-        InteractiveTrigger.isTrigger = true;
+        InteractiveTrigger.GetComponent<Collider>().isTrigger = true;
         if (GroundedCheck == null)
         {
             GroundedCheck = GetComponentInChildren<GroundedCheck>();
@@ -117,8 +116,7 @@ public class Character : MonoBehaviour
             .AddTo(_checkTargetSubscriptions);
         _onMissingDestinationEvent += OnMissingDestination;
         //the destination point is reached only when the InteractiveTrigger overlaps with the target
-        InteractiveTrigger.OnTriggerStayAsObservable().Subscribe(ReachDestinationCheck)
-            .AddTo(_interactiveTriggerSubscription);
+        InteractiveTrigger.OnTriggerStayEvent += ReachDestinationCheck;
     }
 
     private Vector3 ClosestPoint(GameObject target)
@@ -156,7 +154,6 @@ public class Character : MonoBehaviour
 
     private void ReachDestinationCheck(Collider other)
     {
-            Debug.Log(other.name);
         if(other.gameObject.transform.IsChildOf(_destination.transform))
         {
             RotateToDestination(other.transform.position);
@@ -207,7 +204,7 @@ public class Character : MonoBehaviour
         _onMissingDestinationEvent = null;
         _groundingSubscription.Clear();
         _checkTargetSubscriptions.Clear();
-        _interactiveTriggerSubscription.Clear();
+        InteractiveTrigger.OnTriggerStayEvent -= ReachDestinationCheck;
     }
 
     protected virtual void OnDestroy()

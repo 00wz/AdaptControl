@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 873740c5624f93c4bacf4999d8eff7b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractiveTrigger: {fileID: 8078091382025146890}
+  InteractiveTrigger: {fileID: 5085796943131581022}
   GroundedCheck: {fileID: 0}
   RotateSpeed: 360
   SearchRadius: 5
@@ -137,6 +137,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2493231510229887298}
   - component: {fileID: 8078091382025146890}
+  - component: {fileID: 5085796943131581022}
   m_Layer: 3
   m_Name: InteractTrigger
   m_TagString: Untagged
@@ -180,6 +181,18 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5085796943131581022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6795251697515920953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51e69d9139d7a0742b28592ffcf11128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7286155505750827020
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -569,7 +582,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 1
   Grounded: 1
-  RotateToMovementDirection: 0
+  RotateToMovementDirection: 1
 --- !u!114 &1967691258703756978
 MonoBehaviour:
   m_ObjectHideFlags: 0
