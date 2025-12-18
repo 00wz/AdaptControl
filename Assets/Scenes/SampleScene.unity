@@ -202,6 +202,223 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011778}
   m_CullTransparentMesh: 1
+--- !u!1 &48449044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 48449046}
+  - component: {fileID: 48449047}
+  m_Layer: 0
+  m_Name: NewStorySystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &48449046
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 48449044}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.544205, y: -0.40157127, z: 39.13958}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &48449047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 48449044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e06d0aafdf6f04296efabbe8dc2cdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _storyGraph:
+    storyTasks:
+    - rid: 3781011979153440770
+    - rid: 3781011979153440771
+    - rid: 3781011979153440775
+    - rid: 3781011979153440777
+    - rid: 3781011979153440779
+    - rid: 3781011979153440781
+    - rid: 3781011979153440783
+    - rid: 3781011979153440786
+    - rid: 3781011979153440788
+    - rid: 3781011979153440790
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 3781011979153440770
+      type: {class: StartStoryTask, ns: StoryTool.BuiltInTasks, asm: StoryTool.BuiltInTasks}
+      data:
+        _editorNodePosition: {x: 209, y: 193}
+        _activityFlag_editor: 0
+        start:
+          _nextTriggerLink:
+            rid: 3781011979153440772
+    - rid: 3781011979153440771
+      type: {class: ShowDialogStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 354, y: 158}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 3781011979153440772
+        end:
+          _nextTriggerLink:
+            rid: 3781011979153440776
+        DialogHeader: Welcome!
+        DialogBody: You're playing for God. Develop your civilization.
+    - rid: 3781011979153440772
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 3781011979153440775
+      type: {class: ShowTargetStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 663, y: 158}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 3781011979153440776
+        end:
+          _nextTriggerLink:
+            rid: 3781011979153440778
+        Target: {fileID: 1184321186}
+        ShowTime: 1
+        Refundable: 0
+    - rid: 3781011979153440776
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 3781011979153440777
+      type: {class: ShowDialogStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 974, y: 158}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 3781011979153440778
+        end:
+          _nextTriggerLink:
+            rid: 3781011979153440780
+        DialogHeader: The first parishioner
+        DialogBody: You can move people with the mouse by clicking on them with the
+          left mouse button. Use the mouse wheel to lift.
+    - rid: 3781011979153440778
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 3781011979153440779
+      type: {class: ShowDialogStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 1271, y: 158}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 3781011979153440780
+        end:
+          _nextTriggerLink:
+            rid: 3781011979153440782
+        DialogHeader: The first parishioner
+        DialogBody: Send the first person to fish. Move it next to the water. (Blue
+          oval).
+    - rid: 3781011979153440780
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 3781011979153440781
+      type: {class: ShowTargetStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 1560, y: 158}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 3781011979153440782
+        end:
+          _nextTriggerLink:
+            rid: 3781011979153440784
+        Target: {fileID: 2070710835}
+        ShowTime: 0.5
+        Refundable: 1
+    - rid: 3781011979153440782
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 3781011979153440783
+      type: {class: StartWorkStoryLine, ns: NewStorySystem.Editor, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 1880, y: 158}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 3781011979153440784
+        end:
+          _nextTriggerLink:
+            rid: 3781011979153440787
+        Workplace: {fileID: 2070710830}
+    - rid: 3781011979153440784
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 3781011979153440786
+      type: {class: WaitStoryLine, ns: NewStorySystem.Editor, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 2194, y: 158}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 3781011979153440787
+        end:
+          _nextTriggerLink:
+            rid: 3781011979153440789
+        WaitingTime: 3
+    - rid: 3781011979153440787
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 3781011979153440788
+      type: {class: ShowDialogStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 2368, y: 158}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 3781011979153440789
+        end:
+          _nextTriggerLink:
+            rid: 3781011979153440791
+        DialogHeader: Building materials
+        DialogBody: Great! You know how to get food. Now we need to build a house.
+          To get construction materials, send a man to work in the forest.
+    - rid: 3781011979153440789
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 3781011979153440790
+      type: {class: ShowTargetStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 2676, y: 158}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 3781011979153440791
+        end:
+          _nextTriggerLink:
+            rid: -2
+        Target: {fileID: 735973585}
+        ShowTime: 0.5
+        Refundable: 1
+    - rid: 3781011979153440791
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
 --- !u!1 &104237154
 GameObject:
   m_ObjectHideFlags: 0
@@ -1542,7 +1759,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 810072087}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d3132c670e3db40bd06746f43b422d, type: 3}
   m_Name: 
@@ -3424,3 +3641,4 @@ SceneRoots:
   - {fileID: 2132418311}
   - {fileID: 810072089}
   - {fileID: 416037990}
+  - {fileID: 48449046}
