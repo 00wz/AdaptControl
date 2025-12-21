@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.00wz.storytool": {
-      "version": "file:D:/Projects/StoryTool/Assets/StoryTool",
+      "version": "file:D:/UnityProj/StoryTool/Assets/StoryTool",
       "depth": 0,
       "source": "local",
       "dependencies": {
