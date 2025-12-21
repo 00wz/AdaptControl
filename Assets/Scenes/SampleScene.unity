@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -38,13 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -67,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -258,6 +254,22 @@ MonoBehaviour:
     - rid: 3781011979153440786
     - rid: 3781011979153440788
     - rid: 3781011979153440790
+    - rid: 4374795627287805955
+    - rid: 4374795627287805957
+    - rid: 4374795627287805959
+    - rid: 4374795627287806017
+    - rid: 4374795627287806019
+    - rid: 4374795627287806021
+    - rid: 4374795627287806023
+    - rid: 4374795627287806025
+    - rid: 4374795627287806027
+    - rid: 4374795627287806029
+    - rid: 4374795627287806031
+    - rid: 4374795627287806033
+    - rid: 4374795627287806035
+    - rid: 4374795627287806037
+    - rid: 4374795627287806039
+    - rid: 4374795627287806041
   references:
     version: 2
     RefIds:
@@ -358,7 +370,7 @@ MonoBehaviour:
     - rid: 3781011979153440783
       type: {class: StartWorkStoryLine, ns: NewStorySystem.Editor, asm: Assembly-CSharp}
       data:
-        _editorNodePosition: {x: 1880, y: 158}
+        _editorNodePosition: {x: 1881.6, y: 157.6}
         _activityFlag_editor: 0
         start:
           _triggerlink:
@@ -412,11 +424,265 @@ MonoBehaviour:
             rid: 3781011979153440791
         end:
           _nextTriggerLink:
-            rid: -2
+            rid: 4374795627287805956
         Target: {fileID: 735973585}
         ShowTime: 0.5
         Refundable: 1
     - rid: 3781011979153440791
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287805955
+      type: {class: StartWorkAnyStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 3015.2, y: 157.6}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287805956
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287805958
+        Workplaces:
+        - {fileID: 717028740}
+        - {fileID: 735973587}
+        - {fileID: 2021667203}
+    - rid: 4374795627287805956
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287805957
+      type: {class: WaitStoryLine, ns: NewStorySystem.Editor, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 3380, y: 157.6}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287805958
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287805960
+        WaitingTime: 3
+    - rid: 4374795627287805958
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287805959
+      type: {class: AddBuildStoryPoint, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 3565.6, y: 157.6}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287805960
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806018
+        Building: {fileID: 11400000, guid: f09d93bcb22954b4fb75bf2a82fa7872, type: 2}
+    - rid: 4374795627287805960
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806017
+      type: {class: ShowDialogStoryPoint, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 3904.8, y: 157.6}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806018
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806020
+        DialogHeader: House
+        DialogBody: Now we can build a dwelling. Select a hut by clicking on the
+          box icon and choose the location where you want to build it.
+    - rid: 4374795627287806018
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806019
+      type: {class: WaitBuildConstructionSiteStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 4209.6, y: 158.40001}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806020
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806022
+        BuildingConfig: {fileID: 11400000, guid: f09d93bcb22954b4fb75bf2a82fa7872, type: 2}
+    - rid: 4374795627287806020
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806021
+      type: {class: ShowDialogStoryPoint, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 4558.4, y: 157.6}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806022
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806024
+        DialogHeader: House
+        DialogBody: Good. Now send a man there to build.
+    - rid: 4374795627287806022
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806023
+      type: {class: WaitEndBuildingStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 4842.4, y: 157.6}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806024
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806026
+        BuildingConfig: {fileID: 11400000, guid: f09d93bcb22954b4fb75bf2a82fa7872, type: 2}
+    - rid: 4374795627287806024
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806025
+      type: {class: ShowDialogStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 5181.6, y: 158.40001}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806026
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806028
+        DialogHeader: House
+        DialogBody: When a hut is built, a new citizen moves in.
+    - rid: 4374795627287806026
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806027
+      type: {class: WaitStoryLine, ns: NewStorySystem.Editor, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 5464.8, y: 158.40001}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806028
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806030
+        WaitingTime: 3
+    - rid: 4374795627287806028
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806029
+      type: {class: ShowDialogStoryPoint, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 5652, y: 158.40001}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806030
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806032
+        DialogHeader: Harvest
+        DialogBody: As the population grows, so does the need for food. Teach your
+          people how to farm. To do this, click on the bread icon at the bottom right
+          and select a location to plant.
+    - rid: 4374795627287806030
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806031
+      type: {class: AddBuildStoryPoint, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 5952, y: 159.20001}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806032
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806034
+        Building: {fileID: 11400000, guid: 7c1f5ea89e203d04ab12d01521de0e3a, type: 2}
+    - rid: 4374795627287806032
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806033
+      type: {class: WaitBuildConstructionSiteStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 6272, y: 158.40001}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806034
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806036
+        BuildingConfig: {fileID: 11400000, guid: 7c1f5ea89e203d04ab12d01521de0e3a, type: 2}
+    - rid: 4374795627287806034
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806035
+      type: {class: ShowDialogStoryPoint, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 6627.2, y: 158.40001}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806036
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806038
+        DialogHeader: Harvest
+        DialogBody: As the population grows, so does the need for food. Teach your
+          people how to farm. To do this, click on the bread icon at the bottom right
+          and select a location to plant.
+    - rid: 4374795627287806036
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806037
+      type: {class: WaitEndBuildingStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 6944, y: 159.20001}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806038
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806040
+        BuildingConfig: {fileID: 11400000, guid: 7c1f5ea89e203d04ab12d01521de0e3a, type: 2}
+    - rid: 4374795627287806038
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806039
+      type: {class: WaitStoryLine, ns: NewStorySystem.Editor, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 7294.4, y: 161.6}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806040
+        end:
+          _nextTriggerLink:
+            rid: 4374795627287806042
+        WaitingTime: 3
+    - rid: 4374795627287806040
+      type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
+      data: 
+    - rid: 4374795627287806041
+      type: {class: ShowDialogStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
+      data:
+        _editorNodePosition: {x: 7472.8, y: 161.6}
+        _activityFlag_editor: 0
+        start:
+          _triggerlink:
+            rid: 4374795627287806042
+        end:
+          _nextTriggerLink:
+            rid: -2
+        DialogHeader: Thanks for playing!
+        DialogBody: The end of the storyline. You can continue to develop your civilization.
+    - rid: 4374795627287806042
       type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
       data: 
 --- !u!1 &104237154
@@ -1354,11 +1620,10 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   m_Enabled: 1
-  serializedVersion: 10
+  serializedVersion: 11
   m_Type: 1
-  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 2.6
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1406,8 +1671,12 @@ Light:
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!4 &705507995
 Transform:
   m_ObjectHideFlags: 0
@@ -2061,6 +2330,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2935,6 +3207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
   m_AgentTypeID: 0
   m_CollectObjects: 0
   m_Size: {x: 10, y: 10, z: 10}
@@ -3339,6 +3612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
   m_OverrideArea: 1
   m_Area: 1
   m_OverrideGenerateLinks: 0
@@ -3386,6 +3660,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
