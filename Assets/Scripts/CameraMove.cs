@@ -20,7 +20,7 @@ public class CameraMove : MonoBehaviour
     private Vector3 LOCAL_RIGHT;
     private Vector3 LOCAL_FORWARD;
     private float _targetHeight;
-    private bool CanHandleInput { get; set; } = true;
+    private bool IgnoreMoveCalling { get; set; } = false;
     private const int SCREEN_ERROR = 5;
 
     void Start()
@@ -30,11 +30,21 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
-        Vector3 input = ReadInput();
+        HundleVerticalMovement();
+    }
 
-        if(input!=Vector3.zero)
+    private void HundleVerticalMovement()
+    {
+        if (Input.GetMouseButton(0))//so it doesn't conflict with the GodsHand
         {
-            Move(input);
+            return;
+        }
+
+        var mouseScrollInput = Input.GetAxis("Mouse ScrollWheel");
+        if (mouseScrollInput != 0)
+        {
+            _targetHeight -= mouseScrollInput * HeightChangeStep;
+            _targetHeight = Mathf.Clamp(_targetHeight, Min.y, Max.y);
         }
 
         //smooth vertical movement
@@ -44,49 +54,14 @@ public class CameraMove : MonoBehaviour
             transform.position.z);
     }
 
-    private Vector3 ReadInput()
+    public void Move(Vector3 deltaPosition)
     {
-        Vector3 input = Vector3.zero;
-
-        if (!CanHandleInput)
+        if (IgnoreMoveCalling)
         {
-            return input;
+            return;
         }
-
-        if (Input.mousePosition.x >= Screen.width - SCREEN_ERROR)
-        {
-            input.x = 1f;
-        }
-        else if (Input.mousePosition.x <= 0 + SCREEN_ERROR)
-        {
-            input.x = -1f;
-        }
-
-        if (Input.mousePosition.y >= Screen.height - SCREEN_ERROR)
-        {
-            input.y = 1f;
-        }
-        else if (Input.mousePosition.y <= 0 + SCREEN_ERROR)
-        {
-            input.y = -1f;
-        }
-
-        if (!Input.GetMouseButton(0))//so it doesn't conflict with the GodsHand
-        {
-            input.z = Input.GetAxis("Mouse ScrollWheel");
-        }
-
-        return input;
-    }
-
-    private void Move(Vector3 input)
-    {
-        transform.Translate(input.x * LOCAL_RIGHT * MoveSpeed * Time.deltaTime, Space.World);
-        transform.Translate(input.y * LOCAL_FORWARD * MoveSpeed * Time.deltaTime, Space.World);
+        transform.Translate(deltaPosition, Space.World);
         ClampHorizontalPosition();
-
-        _targetHeight -= input.z * HeightChangeStep;
-        _targetHeight = Mathf.Clamp(_targetHeight, Min.y, Max.y);
     }
 
     private void OnDrawGizmosSelected()
@@ -104,13 +79,13 @@ public class CameraMove : MonoBehaviour
     public void ShowTarget(Transform target, Action onExecution, float showTime, bool refundable = false)
     {
         StopAllCoroutines();
-        CanHandleInput = false;
+        IgnoreMoveCalling = true;
         Observable.WhenAll( 
             Observable.FromCoroutine(_ =>ShowTarget(target.position, showTime, refundable)))
             .Subscribe(_ =>
             {
                 onExecution?.Invoke();
-                CanHandleInput = true;
+                IgnoreMoveCalling = false;
             });
     }
         

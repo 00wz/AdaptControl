@@ -270,6 +270,7 @@ MonoBehaviour:
     - rid: 4374795627287806037
     - rid: 4374795627287806039
     - rid: 4374795627287806041
+    - rid: 3781012088574443713
   references:
     version: 2
     RefIds:
@@ -431,6 +432,14 @@ MonoBehaviour:
     - rid: 3781011979153440791
       type: {class: TriggerLink, ns: StoryTool.Runtime, asm: StoryTool.Runtime}
       data: 
+    - rid: 3781012088574443713
+      type: {class: StartStoryTask, ns: StoryTool.BuiltInTasks, asm: StoryTool.BuiltInTasks}
+      data:
+        _editorNodePosition: {x: 209, y: 432}
+        _activityFlag_editor: 0
+        start:
+          _nextTriggerLink:
+            rid: -2
     - rid: 4374795627287805955
       type: {class: StartWorkAnyStoryLine, ns: NewStorySystem, asm: Assembly-CSharp}
       data:
@@ -2523,7 +2532,7 @@ RectTransform:
   m_Father: {fileID: 1378849732}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2620,7 +2629,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1107519285
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3566,6 +3575,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 231fdd8f2a845044aa411be2668d752c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2063841301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2063841303}
+  - component: {fileID: 2063841302}
+  m_Layer: 0
+  m_Name: TestStory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2063841302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063841301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e06d0aafdf6f04296efabbe8dc2cdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _storyGraph:
+    storyTasks: []
+  references:
+    version: 2
+    RefIds: []
+--- !u!4 &2063841303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063841301}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2070710829
 GameObject:
   m_ObjectHideFlags: 0
@@ -3919,3 +3977,4 @@ SceneRoots:
   - {fileID: 810072089}
   - {fileID: 416037990}
   - {fileID: 48449046}
+  - {fileID: 2063841303}

@@ -16,16 +16,40 @@ public class GodsHand : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, charactersLayers))
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue))
             {
-                Rigidbody target = raycastHit.rigidbody;
-                if(target!=null)
+                if((charactersLayers.value & (1 << raycastHit.collider.gameObject.layer)) != 0)
                 {
-                    Vector3 screenOffset =
-                        Camera.main.WorldToScreenPoint(target.position) - Input.mousePosition;
-                    StartCoroutine(Drag(target, screenOffset));
+                    Rigidbody target = raycastHit.rigidbody;
+                    if(target!=null)
+                    {
+                        Vector3 screenOffset =
+                            Camera.main.WorldToScreenPoint(target.position) - Input.mousePosition;
+                        StartCoroutine(Drag(target, screenOffset));
+                    }
+                }
+                else
+                {
+                    var anchorPosition = raycastHit.point;
+                    StartCoroutine(MoveCamera(anchorPosition));
                 }
             }
+        }
+    }
+
+    IEnumerator MoveCamera(Vector3 anchorPosition)
+    {
+        Plane plane = new Plane(Vector3.up, anchorPosition);
+        while (Input.GetMouseButton(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if(plane.Raycast(ray, out float enter))
+            {
+                var raycastHitPoint = ray.GetPoint(enter);
+                GameRoot.Instance.CameraMove.Move(anchorPosition - raycastHitPoint);
+            }
+
+            yield return null;
         }
     }
 
